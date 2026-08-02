@@ -1,0 +1,48 @@
+clc;
+clear;
+close all;
+
+I = imread('coins.png');
+gray = im2gray(I);
+
+% Pad image to nearest power of 2
+[m,n] = size(gray);
+newSize = 2^nextpow2(max(m,n));
+
+paddedImg = padarray(gray,[newSize-m,newSize-n],'post');
+
+figure;
+
+subplot(2,3,1);
+imshow(gray);
+title('Original Image');
+
+seedThreshold = 100;
+regionGrow = gray > seedThreshold;
+
+subplot(2,3,2);
+imshow(regionGrow);
+title('Region Growing');
+
+splitFunc = @(block) std2(block) > 15;
+
+S = qtdecomp(paddedImg,splitFunc,4);
+
+splitImg = repmat(uint8(0),size(paddedImg));
+
+dims = [512 256 128 64 32 16 8 4 2 1];
+
+for dim = dims
+    [vals,r,c] = find(S==dim);
+
+    for i=1:length(r)
+        block = paddedImg(r(i):r(i)+dim-1,c(i):c(i)+dim-1);
+
+        splitImg(r(i):r(i)+dim-1,c(i):c(i)+dim-1)=...
+            uint8(mean(block(:)));
+    end
+end
+
+subplot(2,3,3);
+imshow(splitImg);
+title('Split and Merge');
