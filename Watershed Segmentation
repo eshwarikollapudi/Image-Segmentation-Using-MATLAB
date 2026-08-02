@@ -1,0 +1,28 @@
+clc;
+clear;
+close all;
+
+I = imread('coins.png');
+
+gray = im2gray(I);
+
+bw = imbinarize(gray);
+
+% Distance Transform
+D = -bwdist(~bw);
+
+% Watershed Transform
+L = watershed(D);
+
+I2 = gray;
+I2(L==0)=0;
+
+figure;
+
+subplot(1,2,1);
+imshow(gray);
+title('Original');
+
+subplot(1,2,2);
+imshow(I2);
+title('Watershed Segmentation');
