@@ -1,0 +1,31 @@
+clc;
+clear;
+close all;
+
+% Read Image
+I = imread('coins.png');
+gray = rgb2gray(I);
+
+figure;
+
+subplot(2,2,1);
+imshow(gray);
+title('Original Gray Image');
+
+% Sobel Edge Detection
+sobelEdges = edge(gray,'sobel');
+subplot(2,2,2);
+imshow(sobelEdges);
+title('Sobel Edges');
+
+% Prewitt Edge Detection
+prewittEdges = edge(gray,'prewitt');
+subplot(2,2,3);
+imshow(prewittEdges);
+title('Prewitt Edges');
+
+% Canny Edge Detection
+cannyEdges = edge(gray,'canny');
+subplot(2,2,4);
+imshow(cannyEdges);
+title('Canny Edges');
