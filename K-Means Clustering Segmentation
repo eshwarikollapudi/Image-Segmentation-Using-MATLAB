@@ -1,0 +1,18 @@
+clc;
+clear;
+close all;
+
+I = imread('peppers.png');
+
+lab_img = rgb2lab(I);
+
+ab = lab_img(:,:,2:3);
+ab = single(ab);
+
+nColors = 3;
+
+pixel_labels = imsegkmeans(ab,nColors);
+
+figure;
+imshow(pixel_labels,[]);
+title('K-Means Segmentation');
