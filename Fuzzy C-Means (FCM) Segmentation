@@ -1,0 +1,24 @@
+clc;
+clear;
+close all;
+
+I = imread('peppers.png');
+
+lab_img = rgb2lab(I);
+
+ab = lab_img(:,:,2:3);
+ab = single(ab);
+
+data = double(reshape(ab,[],2));
+
+nColors = 3;
+
+[center,U] = fcm(data,nColors);
+
+[~,cluster_idx] = max(U);
+
+fcm_labels = reshape(cluster_idx,size(lab_img(:,:,1)));
+
+figure;
+imshow(label2rgb(fcm_labels));
+title('Fuzzy C-Means Segmentation');
